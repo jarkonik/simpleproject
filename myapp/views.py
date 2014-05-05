@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.views.generic import View
-from django.template import Template, Context, loader
+from django.template import Template, Context, loader, RequestContext
 
 
 import requests
@@ -16,11 +16,17 @@ class HomeView(View):
 
     def get(self, request, *args, **kwargs):
 
-        template = loader.get_template('home.html')
+        #Set origin city
+        if request.GET['origin']:
+            origin = request.GET['origin']
+        else:
+            origin = 'Krakow'
 
+        template = loader.get_template('home.html')
+       
         #Get distances from Google
-        destinations = ['Poznan','Warszawa','Gdansk','Zakopane','Rzeszow','Wroclaw','Katowice']
-        result =GoogleDistance.get_distance_data("Poznan",destinations,'AIzaSyDkdZe_tf0LWNNjZty0SSwF80KZib6o5_I')
+        destinations = ['London','Paris','Warsaw','Rome','Madrit','Athens','Oslo']
+        result =GoogleDistance.get_distance_data(origin,destinations,'AIzaSyDkdZe_tf0LWNNjZty0SSwF80KZib6o5_I')
 
         # Convert to js compatible arrays
         chart_data = []
@@ -31,7 +37,7 @@ class HomeView(View):
         chart_data = json.dumps(chart_data)
         chart_cities = json.dumps(chart_cities)
       
-        context = Context({'destianions_with_time': result,'chart_data': chart_data,'chart_cities': chart_cities})
+        context = RequestContext(request,{'destianions_with_time': result,'chart_data': chart_data,'chart_cities': chart_cities,'origin': origin})
 
         return HttpResponse(template.render(context))
 
