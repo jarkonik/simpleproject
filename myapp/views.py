@@ -17,15 +17,13 @@ class HomeView(View):
     def get(self, request, *args, **kwargs):
 
         #Set origin city
-        if request.GET['origin']:
-            origin = request.GET['origin']
-        else:
-            origin = 'Krakow'
+        origin = request.GET.get('origin','Kraków')
+
 
         template = loader.get_template('home.html')
        
         #Get distances from Google
-        destinations = ['London','Paris','Warsaw','Rome','Madrit','Athens','Oslo']
+        destinations = ['London','Paris','Warsaw','New York','Los Angeles','Melbourne','Moscow','Berlin','Oslo','Rome']
         result =GoogleDistance.get_distance_data(origin,destinations,'AIzaSyDkdZe_tf0LWNNjZty0SSwF80KZib6o5_I')
 
         # Convert to js compatible arrays

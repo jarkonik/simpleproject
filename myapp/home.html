@@ -20,9 +20,9 @@
                 var maxValue = d3.max(durations);
                 var barHeight = height / durations.length;
                 var barWidth = function(datum) {
-                    return datum * ((width-150) / maxValue);
+                    return datum * ((width-200) / maxValue);
                 };
-                var barX = 150;
+                var barX = 200;
                 var textX = 0;
                 var barY = function(datum, index) {
                     return (index) * barHeight;
@@ -72,9 +72,11 @@
             <ul>
                 {% for city,info in destianions_with_time.items %}
                     <li>
-                    <b>{{ city|safe }}</b><br>
+                    <b>{{ city|safe }}</b>
+                    <br>
                     Distance: {{ info.distance_text | safe }}
-                    duration: {{ info.duration_text | safe }}
+                    <br>
+                    Duration: {{ info.duration_text | safe }}
                     </li>
 
                 {% endfor %}
